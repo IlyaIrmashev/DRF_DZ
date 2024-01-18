@@ -1,7 +1,7 @@
 from django.urls import path
 from courses.apps import CoursesConfig
 from courses.views import CourseViewSet, LessonListAPIView, LessonCreateAPIView, LessonUpdateAPIView, \
-    LessonRetrieveAPIView, LessonDestroyAPIView
+    LessonRetrieveAPIView, LessonDestroyAPIView, PaymentListAPIView
 from rest_framework.routers import DefaultRouter
 
 app_name = CoursesConfig.name
@@ -15,4 +15,6 @@ urlpatterns = [
     path('lesson/update/<int:pk>/', LessonUpdateAPIView.as_view(), name='lesson_update'),
     path('lesson/<int:pk>/', LessonRetrieveAPIView.as_view(), name='lesson_get'),
     path('lesson/delete/<int:pk>/', LessonDestroyAPIView.as_view(), name='lesson_delete'),
+
+    path('payment/', PaymentListAPIView.as_view(), name='payment_list'),
 ] + router.urls

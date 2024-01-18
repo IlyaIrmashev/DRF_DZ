@@ -1,11 +1,28 @@
-from courses.models import Course, Lesson
-from courses.serializers import CourseSerializer, LessonSerializer
+from django.db.models import Count
+from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticated
+
+from django_filters.rest_framework import DjangoFilterBackend
+from courses.models import Course, Lesson, Payment
+from courses.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer, CourseListSerializer, \
+    LessonDetailSerializer, PaymentListSerializer
 from rest_framework import viewsets, generics
 
 
+
+
 class CourseViewSet(viewsets.ModelViewSet):
-    serializer_class = CourseSerializer
-    queryset = Course.objects.all()
+    serializer_class = CourseDetailSerializer
+    #permission_classes = [IsAuthenticated]
+    queryset = Course.objects.annotate(lessons_count=Count('lesson'))
+    default_serializer = CourseSerializer
+    serializers = {
+        'list': CourseListSerializer,
+        'retrieve': CourseDetailSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializers.get(self.action, self.default_serializer)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
@@ -24,10 +41,18 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
-    serializer_class = LessonSerializer
+    serializer_class = LessonDetailSerializer
     queryset = Lesson.objects.all()
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+
+
+class PaymentListAPIView(generics.ListAPIView):
+    serializer_class = PaymentListSerializer
+    queryset = Payment.objects.all()
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ('paid_course', 'paid_lesson', 'payment_method')
+    ordering_fields = ('date_payment',)
