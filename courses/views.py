@@ -6,7 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from courses.models import Course, Lesson, Payment
 from courses.paginators import CoursesPaginator
 from courses.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer, CourseListSerializer, \
-    LessonDetailSerializer, PaymentListSerializer, SubscriptionSerializer
+    LessonDetailSerializer, PaymentListSerializer, SubscriptionSerializer, PaymentRetrieveSerializer, \
+    PaymentCreateSerializer, PaymentSerializer
 from rest_framework import viewsets, generics
 
 from users.permissions import IsBuyer, IsModerator
@@ -65,6 +66,31 @@ class PaymentListAPIView(generics.ListAPIView):
     filterset_fields = ('paid_course', 'paid_lesson', 'payment_method')
     ordering_fields = ('date_payment',)
     permission_classes = [IsAuthenticated]
+    pagination_class = CoursesPaginator
+
+
+class PaymentDetailAPIView(generics.RetrieveAPIView):
+    serializer_class = PaymentRetrieveSerializer
+    queryset = Payment.objects.all()
+    permission_classes = [IsAuthenticated, IsModerator]
+
+
+class PaymentCreateAPIView(generics.CreateAPIView):
+    serializer_class = PaymentCreateSerializer
+    queryset = Payment.objects.all()
+    permission_classes = [IsAuthenticated, IsBuyer, IsModerator]
+
+
+class PaymentUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = PaymentSerializer
+    queryset = Payment.objects.all()
+    permission_classes = [IsAuthenticated, IsModerator]
+
+
+class PaymentDeleteAPIView(generics.DestroyAPIView):
+    serializer_class = PaymentSerializer
+    queryset = Payment.objects.all()
+    permission_classes = [IsAuthenticated, IsModerator]
 
 
 class SubscriptionCreateAPIView(generics.CreateAPIView):

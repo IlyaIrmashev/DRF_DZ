@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'drf_yasg',
     'rest_framework.authtoken',
     'rest_framework',
     'rest_framework_simplejwt',
@@ -143,3 +144,4 @@ REST_FRAMEWORK = {
     ]
 }
 
+STRIPE_SECRET_KEY = 'pk_test_51OdxHUK6wdmP0lbposY3LNbfjsr3Q9RVHEFqxzUqTDYSwSKxeF5xcLpA6C3iNr0dj5DHu72JpaN2PH1R4Mq5S4iw00zUrUTJHn'
