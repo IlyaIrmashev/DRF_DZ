@@ -10,6 +10,7 @@ from courses.serializers import CourseSerializer, LessonSerializer, CourseDetail
     PaymentCreateSerializer, PaymentSerializer
 from rest_framework import viewsets, generics
 
+from courses.tasks import send_mail_about_update
 from users.permissions import IsBuyer, IsModerator
 
 
@@ -26,6 +27,16 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         return self.serializers.get(self.action, self.default_serializer)
+
+
+class CourseUpdateView(generics.UpdateAPIView):
+    queryset = Course.object.all()
+    serializer_class = CourseSerializer
+
+    def perform_update(self, serializer):
+        serializer.save()
+        email = serializer.context['request'].user.email
+        send_mail_about_update.delay(email)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
