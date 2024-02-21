@@ -30,7 +30,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 
 class CourseUpdateView(generics.UpdateAPIView):
-    queryset = Course.object.all()
+    queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
     def perform_update(self, serializer):
