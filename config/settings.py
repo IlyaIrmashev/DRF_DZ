@@ -150,10 +150,10 @@ REST_FRAMEWORK = {
 STRIPE_SECRET_KEY = 'pk_test_51OdxHUK6wdmP0lbposY3LNbfjsr3Q9RVHEFqxzUqTDYSwSKxeF5xcLpA6C3iNr0dj5DHu72JpaN2PH1R4Mq5S4iw00zUrUTJHn'
 
 # URL-адрес брокера сообщений
-CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
 
 # URL-адрес брокера результатов, также Redis
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = "Europe/Moscow"
